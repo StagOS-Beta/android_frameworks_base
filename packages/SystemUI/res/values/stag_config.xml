@@ -8,4 +8,8 @@
 
     <!-- Config to denote that our udfps position is at the bottom -->
     <bool name="config_udfpsPositionBottom">true</bool>
+
+    <!-- Body font family -->
+    <string name="config_bodyFontFamily">@*android:string/config_bodyFontFamily</string>
+
 </resources>

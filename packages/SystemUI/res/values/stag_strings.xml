@@ -58,4 +58,13 @@
     <string name="qs_data_switch_text_2">SIM 2</string>
     <string name="qs_data_switch_changed_1">Switched data card to SIM 1.</string>
     <string name="qs_data_switch_changed_2">Switched data card to SIM 2.</string>
+
+    <!-- Status bar network traffic monitor strings -->
+    <string name="kilobitspersecond_short" translatable="false">kb/s</string>
+    <string name="megabitspersecond_short" translatable="false">Mb/s</string>
+    <string name="gigabitspersecond_short" translatable="false">Gb/s</string>
+    <string name="kilobytespersecond_short" translatable="false">kB/s</string>
+    <string name="megabytespersecond_short" translatable="false">MB/s</string>
+    <string name="gigabytespersecond_short" translatable="false">GB/s</string>
+
 </resources>
