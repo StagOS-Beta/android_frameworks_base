@@ -499,8 +499,33 @@ public class ThemeOverlayController implements CoreStartable, Dumpable {
             return;
         }
 
-        mUserTracker.addCallback(mUserTrackerCallback, mMainExecutor);
+        mSecureSettings.registerContentObserverForUser(
+                Settings.Secure.getUriFor(Settings.Secure.SYSTEM_CUSTOM_THEME),
+                false,
+                new ContentObserver(mBgHandler) {
+                    @Override
+                    public void onChange(boolean selfChange, Collection<Uri> collection, int flags,
+                            int userId) {
+                        if (DEBUG) Log.d(TAG, "Overlay changed for user: " + userId);
+                        if (mUserTracker.getUserId() != userId) {
+                            return;
+                        }
+                        if (!mDeviceProvisionedController.isUserSetup(userId)) {
+                            Log.i(TAG, "Theme application deferred when setting changed.");
+                            mDeferredThemeEvaluation = true;
+                            return;
+                        }
+                        if (mSkipSettingChange) {
+                            if (DEBUG) Log.d(TAG, "Skipping setting change");
+                            mSkipSettingChange = false;
+                            return;
+                        }
+                        reevaluateSystemTheme(true /* forceReload */);
+                    }
+                },
+                UserHandle.USER_ALL);
 
+        mUserTracker.addCallback(mUserTrackerCallback, mMainExecutor);
         mConfigurationController.addCallback(mConfigurationListener);
         mDeviceProvisionedController.addCallback(mDeviceProvisionedListener);
 
@@ -847,6 +872,14 @@ public class ThemeOverlayController implements CoreStartable, Dumpable {
 
         FabricatedOverlay[] fOverlays = null;
 
+        boolean nightMode = (mContext.getResources().getConfiguration().uiMode
+                & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
+        int customTheme = mSecureSettings.getInt(Settings.Secure.SYSTEM_CUSTOM_THEME, 0);
+        // If custom Theme is 0, that would mean use default system dark theme
+        boolean isCustomTheme = nightMode && (customTheme != 0);
+
+        mThemeManager.setIsCustomTheme(isCustomTheme);
+
         if (mNeedsOverlayCreation) {
             mNeedsOverlayCreation = false;
             fOverlays = new FabricatedOverlay[]{
@@ -857,6 +890,7 @@ public class ThemeOverlayController implements CoreStartable, Dumpable {
         mThemeManager.applyCurrentUserOverlays(categoryToPackage, fOverlays, currentUser,
                 managedProfiles, onCompleteCallback);
 
+        mThemeManager.applyCustomTheme(customTheme, isCustomTheme);
     }
 
     private Style fetchThemeStyleFromSetting() {
