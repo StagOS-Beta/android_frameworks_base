@@ -90,8 +90,5 @@
     <bool name="config_pocketModeSupported">true</bool>
     <!-- Defines custom OEM sensor for pocket detection. -->
     <string name="config_pocketJudgeVendorSensorName"></string>
-
-    <!-- Whether to allow network traffic on statusbar -->
-    <bool name="config_supportsNetworkTrafficOnStatusBar">true</bool>
-
+    
 </resources>
