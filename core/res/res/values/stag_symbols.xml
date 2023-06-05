@@ -99,4 +99,7 @@
     <!-- Pocket Service -->
     <java-symbol type="string" name="config_pocketJudgeVendorSensorName" />
 
+    <!-- Default value for QS_TRANSPARENCY -->
+    <java-symbol type="integer" name="config_qs_transparency" />
+
 </resources>

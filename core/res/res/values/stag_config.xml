@@ -91,4 +91,7 @@
     <!-- Defines custom OEM sensor for pocket detection. -->
     <string name="config_pocketJudgeVendorSensorName"></string>
 
+    <!-- Default value for QS_TRANSPARENCY -->
+    <integer name="config_qs_transparency">40</integer>
+
 </resources>
